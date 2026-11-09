@@ -1,0 +1,40 @@
+name: CI
+on:
+  push:
+  pull_request:
+
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - run: npm install
+      - run: npm run lint        # tsc --noEmit
+      - run: npm test            # logika bisnis, analitik, sumber data lokal & cloud (klien palsu)
+      - run: npm run build       # next build
+
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm}
+      - run: npm install
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e    # uji asap UI di Chromium
+
+  sql:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y postgresql bc
+      - run: bash supabase/tests/run.sh   # schema + fungsi atomik + RLS + konkurensi
+
+  sql-scale:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y postgresql
+      - run: bash supabase/tests/scale.sh   # 210 ribu struk: latensi operasi inti + rencana query memakai indeks

@@ -16,16 +16,6 @@ StokCerdas adalah konsep platform **Smart Inventory & Business Intelligence untu
 
 Logika ada di `src/lib/analytics.ts` dan diuji dengan `npm test` (Node >= 22.6). Tab **Masalah & Solusi** di aplikasi memetakan masalah, fitur, dan angka bukti dari data.
 
-## Validasi lapangan (belum dilakukan, lakukan sebelum final)
-Wawancara 3-5 pemilik toko (15 menit), lalu isi hasilnya di slide dan README ini. Pertanyaan yang disarankan:
-1. Bagaimana Anda mencatat stok sekarang (buku, ingatan, aplikasi)?
-2. Dalam sebulan terakhir, berapa kali barang laris habis saat pembeli datang? Perkiraan kerugiannya?
-3. Barang apa yang menumpuk dan sudah berapa lama? Perkiraan nilainya?
-4. Berapa lama Anda butuh untuk mengecek stok dan menghitung laba tiap minggu?
-5. Apakah Anda akan memakai alat ini? Apa yang membuat Anda berhenti memakainya?
-
-Ringkas jawabannya dalam tabel: nama toko (boleh inisial), jenis toko, cara mencatat, kejadian stok habis per bulan, nilai modal menumpuk, komentar. Hanya tulis angka yang benar-benar Anda dapatkan.
-
 ## Teknologi
 - Next.js 14 App Router, React 18, TypeScript
 - Recharts dan Lucide React

@@ -1,0 +1,36 @@
+{
+  "name": "stokcerdas",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "tsc --noEmit",
+    "test": "node --experimental-strip-types --import ./tests/register.mjs tests/analytics.test.mjs && node --experimental-strip-types --import ./tests/register.mjs tests/inventory.test.mjs && node --experimental-strip-types --import ./tests/register.mjs tests/source.test.mjs && node --experimental-strip-types --import ./tests/register.mjs tests/cloud.test.mjs && node --experimental-strip-types --import ./tests/register.mjs tests/impact.test.mjs",
+    "test:sql": "bash supabase/tests/run.sh",
+    "test:e2e": "node tests/e2e/smoke.mjs",
+    "test:sql:scale": "bash supabase/tests/scale.sh",
+    "bench": "node --experimental-strip-types --import ./tests/register.mjs tests/bench.mjs"
+  },
+  "dependencies": {
+    "@supabase/ssr": "^0.6.1",
+    "@supabase/supabase-js": "^2.49.1",
+    "lucide-react": "^0.468.0",
+    "next": "14.2.25",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "recharts": "^2.15.1"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.17",
+    "postcss": "^8.5.3",
+    "autoprefixer": "^10.4.20",
+    "@types/node": "^22.13.4",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "typescript": "^5.7.3",
+    "esbuild": "^0.24.2",
+    "playwright": "^1.49.1"
+  }
+}
