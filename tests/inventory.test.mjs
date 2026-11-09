@@ -96,7 +96,7 @@ assert.match(localDate(new Date(2026,0,5,23,59)),/^2026-01-05$/);
 console.log("inventory OK");
 
 // --- biaya & barang rusak (dipindah dari UI ke domain)
-import {addExpense,addWaste} from "../src/lib/inventory.ts";
+import {addExpense,addWaste,deleteExpense,deleteWaste} from "../src/lib/inventory.ts";
 let e=ok(addExpense(empty,{name:" Listrik ",amount:350000,category:"Utilitas"},"2026-11-01"));
 assert.equal(e.expenses[0].name,"Listrik"); assert.equal(e.expenses[0].date,"2026-11-01");
 bad(addExpense(empty,{name:"",amount:1,category:"x"}),/wajib/);
@@ -106,4 +106,11 @@ let w=ok(addWaste(empty,{ingredient:"Minyak bocor",amount:15500,reason:"Kemasan 
 assert.equal(w.waste[0].reason,"Kemasan bocor");
 bad(addWaste(empty,{ingredient:" ",amount:5,reason:"x"}),/wajib/);
 bad(addWaste(empty,{ingredient:"A",amount:-1,reason:"x"}),/lebih dari 0/);
+{ // hapus catatan biaya / barang rusak
+  const both=ok(addWaste(e,{ingredient:"Telur",amount:9000,reason:"Rusak"})); assert.equal(both.expenses.length,1); assert.equal(both.waste.length,1);
+  const noE=ok(deleteExpense(both,both.expenses[0].id)); assert.equal(noE.expenses.length,0); assert.equal(noE.waste.length,1,"hapus biaya tidak menyentuh barang rusak");
+  const noW=ok(deleteWaste(both,both.waste[0].id)); assert.equal(noW.waste.length,0); assert.equal(noW.expenses.length,1);
+  bad(deleteExpense(both,"tidak-ada"),/tidak ditemukan/); bad(deleteWaste(both,"tidak-ada"),/tidak ditemukan/);
+  assert.equal(both.expenses.length,1,"state asal tidak dimutasi");
+}
 console.log("expense/waste OK");

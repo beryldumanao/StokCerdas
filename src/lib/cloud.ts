@@ -135,6 +135,16 @@ export function createCloudSource(client: SupabaseLike, businessId: string, opts
       const w = v.state.waste[0];
       return write(() => client.from("waste_records").insert({business_id: businessId, recorded_at: noonIso(w.date), ingredient_name: w.ingredient, amount: w.amount, reason: w.reason}), v.message);
     },
+    async deleteExpense(id) {
+      const cur = last.expenses.find(e => e.id === id);
+      if (!cur) return bad("Catatan biaya tidak ditemukan.");
+      return write(() => client.from("expenses").delete().eq("id", id).eq("business_id", businessId), `Biaya “${cur.name}” dihapus.`);
+    },
+    async deleteWaste(id) {
+      const cur = last.waste.find(w => w.id === id);
+      if (!cur) return bad("Catatan barang rusak tidak ditemukan.");
+      return write(() => client.from("waste_records").delete().eq("id", id).eq("business_id", businessId), `Catatan “${cur.ingredient}” dihapus.`);
+    },
     replaceAll: () => Promise.resolve(bad("Pemulihan cadangan dan reset demo hanya tersedia di mode lokal.")),
   };
 }

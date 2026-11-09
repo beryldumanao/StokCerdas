@@ -8,7 +8,7 @@ function fake(db,rpcImpl={}){
   const client={calls,
     from(table){const q={table,op:"select",filters:[],payload:null};
       const b={select(c){if(q.op==="select")q.cols=c;else q.returning=true;return b},eq(k,v){q.filters.push([k,v]);return b},gte(k,v){q.gte=[k,v];return b},order(c){(q.orders??=[]).push(c);return b},limit(n){q.limit=n;return b},range(a2,b2){q.range=[a2,b2];return b},single(){q.single=true;return b},
-        insert(row){q.op="insert";q.payload=row;return b},update(row){q.op="update";q.payload=row;return b},
+        insert(row){q.op="insert";q.payload=row;return b},update(row){q.op="update";q.payload=row;return b},delete(){q.op="delete";return b},
         then(res,rej){calls.push(q);let out;
           if(q.op==="select"){let d=db[table]||[];if(q.range)d=d.slice(q.range[0],q.range[1]+1);if(q.limit!==undefined)d=d.slice(0,q.limit);out={data:q.single?d[0]:d,error:db.__error&&db.__error===table?{message:"boom "+table}:null}}
           else if(q.op==="insert"){out={data:q.returning?{id:"new-biz"}:null,error:db.__insertError||null}}
@@ -104,6 +104,9 @@ c=fake(DB()); src=createCloudSource(c,B); await src.load(); c.calls.length=0;
 assert.equal((await src.addExpense({name:"",amount:5,category:"x"})).ok,false); assert.equal(c.calls.length,0);
 r=await src.addExpense({name:"Sewa",amount:1000000,category:"Sewa"}); const ins=c.calls.find(x=>x.op==="insert");
 assert.equal(r.ok,true); assert.equal(ins.table,"expenses"); assert.equal(ins.payload.business_id,B); assert.equal(ins.payload.amount,1000000); assert.match(ins.payload.spent_at,/^\d{4}-\d{2}-\d{2}T/);
+r=await src.deleteExpense("e1"); assert.equal(r.ok,true); {const d=c.calls.find(x=>x.op==="delete"); assert.equal(d.table,"expenses"); assert.deepEqual(d.filters,[["id","e1"],["business_id",B]]);}
+assert.equal((await src.deleteExpense("tidak-ada")).ok,false);
+r=await src.deleteWaste("w1"); assert.equal(r.ok,true); assert.equal(c.calls.filter(x=>x.op==="delete").at(-1).table,"waste_records");
 r=await src.addWaste({ingredient:"Telur",amount:9000,reason:"Rusak"}); assert.equal(c.calls.filter(x=>x.op==="insert").at(-1).table,"waste_records");
 
 // --- jaringan putus -> pesan, bukan crash

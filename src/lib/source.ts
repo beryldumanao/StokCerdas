@@ -19,6 +19,8 @@ export interface DataSource {
   adjustStock(input: {productId: string; newStock: number; note?: string}): Promise<Result>;
   addExpense(input: {name: string; amount: number; category: string}): Promise<Result>;
   addWaste(input: {ingredient: string; amount: number; reason: string}): Promise<Result>;
+  deleteExpense(id: string): Promise<Result>;
+  deleteWaste(id: string): Promise<Result>;
   /** Mengganti seluruh data (pulihkan cadangan / reset demo). Hanya didukung mode lokal. */
   replaceAll(state: AppState, message: string): Promise<Result>;
 }
@@ -73,6 +75,8 @@ export function createLocalSource(kv: KV | null): DataSource {
     adjustStock: input => commit(D.adjustStock(state, input)),
     addExpense: input => commit(D.addExpense(state, input)),
     addWaste: input => commit(D.addWaste(state, input)),
+    deleteExpense: id => commit(D.deleteExpense(state, id)),
+    deleteWaste: id => commit(D.deleteWaste(state, id)),
     replaceAll: (next, message) => commit({ok: true, state: next, message}),
   };
 }

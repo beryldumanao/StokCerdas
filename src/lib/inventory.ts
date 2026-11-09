@@ -79,6 +79,18 @@ export function addWaste(state: AppState, input: {ingredient: string; amount: nu
   return {ok: true, state: {...state, waste: [{id: uid(), date, ingredient, amount: input.amount, reason: input.reason || "Barang rusak"}, ...state.waste]}, message: "Barang rusak/hilang berhasil dicatat."};
 }
 
+export function deleteExpense(state: AppState, id: string): Result {
+  const cur = state.expenses.find(e => e.id === id);
+  if (!cur) return fail("Catatan biaya tidak ditemukan.");
+  return {ok: true, state: {...state, expenses: state.expenses.filter(e => e.id !== id)}, message: `Biaya “${cur.name}” dihapus.`};
+}
+
+export function deleteWaste(state: AppState, id: string): Result {
+  const cur = state.waste.find(w => w.id === id);
+  if (!cur) return fail("Catatan barang rusak tidak ditemukan.");
+  return {ok: true, state: {...state, waste: state.waste.filter(w => w.id !== id)}, message: `Catatan “${cur.ingredient}” dihapus.`};
+}
+
 export type SaleLine = {productId: string; qty: number};
 
 /** Mencatat satu struk berisi banyak item. Semua item divalidasi dulu; jika satu gagal, tidak ada yang tercatat. */

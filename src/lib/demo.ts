@@ -14,7 +14,7 @@ export const initialProducts:Product[]=[
 const now = new Date();
 const dateOffset=(n:number)=>{const d=new Date(now);d.setDate(d.getDate()-n);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`};
 export const initialSales:Sale[]=[
-...Array.from({length:42},(_,i)=>{const p=initialProducts[[0,1,2,3,4,6,4,2,6,0,3,1][i%12]];const qty=[2,1,3,2,5,4,6,2,3,1,2,1][i%12];return{id:`s${i+1}`,date:dateOffset(i%14),productId:p.id,productName:p.name,qty,price:p.price,cost:p.cost,total:qty*p.price}})
+...Array.from({length:42},(_,i)=>{const p=initialProducts[[0,1,2,3,4,5,4,2,6,0,3,1][i%12]];const qty=[2,1,3,2,5,4,6,2,3,1,2,1][i%12];return{id:`s${i+1}`,date:dateOffset(i%14),productId:p.id,productName:p.name,qty,price:p.price,cost:p.cost,total:qty*p.price}})
 ];
 export const initialExpenses:Expense[]=[
 {id:"e1",date:dateOffset(1),name:"Listrik toko",amount:350000,category:"Utilitas"},
